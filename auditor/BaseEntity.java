@@ -3,7 +3,6 @@ package com.fifteen.eureka.common.auditor;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.PreUpdate;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,12 +41,11 @@ public abstract class BaseEntity {
   @Column(nullable = false)
   private boolean isDeleted = false;
 
-  @PreUpdate
-  protected void onPreUpdate() {
-    if (isDeleted && deletedAt == null) {
-      deletedAt = LocalDateTime.now();
-      // AuditorAware 빈을 통해 현재 사용자 정보 가져오기
-      deletedBy = AuditorProvider.getAuditorAware().getCurrentAuditor().orElse("system");
+  public void markAsDeleted() {
+    if (!this.isDeleted) {
+      this.isDeleted = true;
+      this.deletedAt = LocalDateTime.now();
+      this.deletedBy = AuditorProvider.getAuditorAware().getCurrentAuditor().orElse("system");
     }
   }
 }
