@@ -1,19 +1,23 @@
 package com.fifteen.eureka.common.response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL) // Null 필드 제외
+@NoArgsConstructor
 public class ApiResponse<T> {
 
-  private final Integer httpStatusCode;
-  private final Integer code;
-  private final String message;
-  private final String description;
-  private final List<String> errorList;
-  private final T data;
+  private Integer httpStatusCode;
+  private Integer code;
+  private String message;
+  private String description;
+  private List<String> errorList;
+  private T data;
 
   private ApiResponse(ResCode resCode, String description, List<String> errorList, T data) {
     this.httpStatusCode = resCode.getHttpStatusCode();
